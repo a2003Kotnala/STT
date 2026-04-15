@@ -1,4 +1,8 @@
 import OpenAI, { toFile } from "openai";
+import type {
+  TranscriptionDiarized,
+  TranscriptionVerbose,
+} from "openai/resources/audio/transcriptions";
 import { pitchOptions } from "@/lib/constants";
 import { audioMimeMap } from "@/server/config";
 import { assertServerEnv, env } from "@/server/env";
@@ -22,13 +26,13 @@ export async function transcribeAudio(params: {
   const file = await toFile(params.buffer, params.fileName, { type: params.contentType });
 
   if (params.enableDiarization) {
-    const response = await client.audio.transcriptions.create({
+    const response = (await client.audio.transcriptions.create({
       file,
       model: env.openAiSttDiarizeModel,
       language: params.language || undefined,
       response_format: "diarized_json",
       chunking_strategy: "auto",
-    });
+    })) as TranscriptionDiarized;
 
     const segments = response.segments.map((segment) => ({
       startMs: Math.round(segment.start * 1000),
@@ -60,14 +64,14 @@ export async function transcribeAudio(params: {
     };
   }
 
-  const response = await client.audio.transcriptions.create({
+  const response = (await client.audio.transcriptions.create({
     file,
     model: env.openAiSttModel,
     language: params.language || undefined,
     response_format: "verbose_json",
     timestamp_granularities: ["segment"],
     temperature: 0,
-  });
+  })) as TranscriptionVerbose;
 
   const segments = (response.segments ?? []).map((segment) => ({
     startMs: Math.round(segment.start * 1000),

@@ -62,7 +62,7 @@ export async function createVoiceOutputForUser(params: {
       voice: payload.voice,
       speed: payload.speed,
       pitch: payload.pitch,
-      format: payload.format,
+      format: payload.format as "mp3" | "wav" | "aac" | "flac" | "opus",
     });
 
     const storedOutput = await storeBuffer(
