@@ -1,101 +1,88 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Mic, Sparkles, Waves } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { getCurrentUser } from "@/server/auth";
 
-export default function Home() {
+export default async function HomePage() {
+  const user = await getCurrentUser();
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="page-shell py-6 sm:py-10">
+      <section className="glass-panel relative overflow-hidden rounded-[2.5rem] bg-hero-glow p-6 sm:p-10 lg:p-14">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/75 px-4 py-2 text-sm text-slate-700">
+              <Waves className="h-4 w-4 text-accent-strong" />
+              Premium AI audio workspace
+            </div>
+            <h1 className="mt-6 max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-6xl">
+              VoiceHub brings transcription and speech generation into one trusted platform.
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+              Upload recordings, capture audio from the browser, edit timestamped transcripts, generate natural voiceovers, and manage every asset from one account.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href={user ? "/dashboard" : "/register"}
+                className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+              >
+                {user ? "Open dashboard" : "Start with VoiceHub"}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href={user ? "/studio/stt" : "/login"}
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-5 py-3 text-sm font-medium text-slate-800 transition hover:bg-white"
+              >
+                Explore the workspace
+              </Link>
+            </div>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <div className="space-y-4">
+            <Card className="rounded-[2rem] bg-white/75">
+              <div className="flex items-start gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-soft text-accent-strong">
+                  <Mic className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-slate-950">Speech to text</p>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Audio upload, browser recording, timestamps, diarization, editing, and export.
+                  </p>
+                </div>
+              </div>
+            </Card>
+            <Card className="rounded-[2rem] bg-white/75">
+              <div className="flex items-start gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-slate-950">Text to speech</p>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Voice selection, output formats, speech history, and reusable asset storage.
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+      <section className="mt-6 grid gap-4 lg:grid-cols-3">
+        <Card className="rounded-[2rem]">
+          <p className="text-sm uppercase tracking-[0.22em] text-slate-500">Unified SaaS Core</p>
+          <p className="mt-4 text-xl font-semibold text-slate-950">One account, shared jobs, shared history, shared usage tracking.</p>
+        </Card>
+        <Card className="rounded-[2rem]">
+          <p className="text-sm uppercase tracking-[0.22em] text-slate-500">Production Architecture</p>
+          <p className="mt-4 text-xl font-semibold text-slate-950">Modular frontend, backend services, provider adapters, and storage abstraction.</p>
+        </Card>
+        <Card className="rounded-[2rem]">
+          <p className="text-sm uppercase tracking-[0.22em] text-slate-500">Future-Ready</p>
+          <p className="mt-4 text-xl font-semibold text-slate-950">Ready for teams, billing, quotas, analytics, and new audio AI tools.</p>
+        </Card>
+      </section>
+    </main>
   );
 }
